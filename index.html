@@ -463,6 +463,56 @@ dialog.more::backdrop { background: rgba(12, 16, 40, .45); -webkit-backdrop-filt
 #dlg-body { display: grid; gap: 20px; }
 .dlg-top .lead { margin-top: 4px; }
 .theme { margin-top: 10px; }
+/* v13: mer luft */
+body { line-height: 1.7; }
+.wrap { padding-bottom: 40px; }
+.r-head { gap: 14px; padding-bottom: 36px; }
+.arches { gap: 26px; margin-top: 20px; }
+.arch-in { padding: 40px 20px 28px; gap: 10px; }
+.guide { padding: 22px 26px; gap: 12px; margin-top: 10px; }
+.guide ul { gap: 10px 28px; }
+.tabs { margin-top: 28px; gap: 10px; }
+.divider { padding-block: 44px 10px; }
+.block { padding-block: 40px 60px; gap: 28px; }
+.pane > .block:first-child { padding-top: 48px; }
+.b-head { gap: 12px; margin-bottom: 6px; }
+.lead { line-height: 1.75; }
+.horo { gap: 32px; }
+.daynav { gap: 10px; margin-bottom: 8px; }
+.theme { gap: 10px; }
+.hrow { gap: 24px; }
+.moonstrip, .rec { padding: 26px 28px; }
+.rec ul { gap: 14px; }
+.tgrid { gap: 24px; }
+.tcard { padding: 26px; gap: 12px; }
+.mrow, .cal li { padding: 24px 28px; gap: 22px; }
+.calm { margin: 40px 0 16px; }
+.portrait .ptext { gap: 14px; }
+.portrait .ptext h3 { margin-top: 22px; }
+.sides { gap: 26px; margin-block: 10px; }
+.side { padding: 26px 28px; gap: 14px; }
+.side ul { gap: 16px; }
+.detail { gap: 32px; }
+.detail .body { gap: 20px; }
+.houses li { padding: 22px 26px; gap: 16px; }
+.gloss div { padding: 20px 24px; }
+.chartbox { gap: 48px; }
+.legend { gap: 12px; }
+#dlg-body { gap: 26px; }
+.dlg-in { padding: 52px clamp(22px, 6vw, 52px) 40px; }
+.dlg-grid { gap: 22px 30px; }
+.landing { gap: 32px; }
+.landing form.panel { gap: 20px; padding-inline: 30px; padding-bottom: 30px; }
+.whatyouget { padding: 28px; gap: 18px; }
+.whatyouget ul { gap: 18px; }
+@media (max-width: 560px) {
+  .block { padding-block: 30px 44px; gap: 22px; }
+  .moonstrip, .rec, .tcard, .side { padding: 20px; }
+  .mrow, .cal li { padding: 18px 16px; gap: 12px; }
+  .houses li { padding: 18px; }
+  .arches { gap: 10px; }
+  .arches .arch-in { padding: 24px 4px 14px; }
+}
 </style>
 </head>
 <body>
