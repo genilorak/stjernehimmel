@@ -513,6 +513,59 @@ body { line-height: 1.7; }
   .arches { gap: 10px; }
   .arches .arch-in { padding: 24px 4px 14px; }
 }
+/* v14: mer profesjonelt uttrykk */
+:root { --r: 14px; --shadow-soft: 0 1px 2px rgba(20, 24, 50, .04), 0 10px 30px -12px rgba(20, 24, 50, .12); }
+body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+.wrap { padding-top: 0; }
+html, body { overflow-x: clip; }
+body { margin: 0; }
+.topbar { position: sticky; top: 0; z-index: 20; margin: 0 calc(50% - 50vw) 12px; padding: 14px max(20px, calc(50vw - 50% + 20px)); min-height: 64px; background: color-mix(in srgb, var(--bg) 82%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent); }
+.logo-sm { display: inline-flex; align-items: center; gap: 10px; font: 500 .95rem/1 var(--f-caps); letter-spacing: .2em; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; text-transform: uppercase; }
+.logo-mark { color: var(--gold); font-size: .9rem; letter-spacing: 0; }
+.palicon { box-shadow: none; }
+.const { opacity: .14; }
+.sprig { opacity: .32; }
+.burst { opacity: .22; }
+.eyebrow { letter-spacing: .2em; }
+h1 { letter-spacing: .1em; }
+/* knapper */
+button { transition: background-color .2s ease, border-color .2s ease, color .2s ease; }
+.ghost, .actions .ghost { background: transparent; border: 1px solid var(--line); color: var(--ink); }
+.ghost:hover { border-color: var(--gold); }
+.actions { align-items: center; gap: 10px; padding: 6px 0 4px; }
+.actions button { padding: 10px 18px; font-size: .72rem; letter-spacing: .14em; }
+#example { font-family: var(--f-caps); text-transform: uppercase; letter-spacing: .14em; font-size: .74rem; text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 11px 22px; color: var(--ink); }
+#example:hover { border-color: var(--gold); }
+/* kort og flater: én felles stil */
+.landing form.panel { box-shadow: var(--shadow-soft); }
+.whatyouget, .guide, .moonstrip, .rec, .tcard, .side, .mlist, .cal, .houses, .gloss, .mooncard { border-radius: var(--r); border: 1px solid var(--line); background: var(--panel); box-shadow: var(--shadow-soft); }
+.rec { border-top: 2px solid var(--gold); }
+.side { border-top: 2px solid var(--gold); }
+.side.shade { border-top-color: var(--rose); background: var(--panel); }
+.tcard { transition: transform .2s ease, box-shadow .2s ease; }
+.arch { box-shadow: var(--shadow-soft); }
+.theme h3 { color: var(--ink); }
+.light { border-radius: 12px; }
+.exnote { margin: 4px 0 0; font-size: .88rem; color: var(--muted); display: flex; align-items: center; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.r-head .badge { justify-self: auto; }
+.guide { margin-top: 18px; }
+/* faner: festet under toppen */
+.tabs { position: sticky; top: 64px; z-index: 15; background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); margin-inline: calc(50% - 50vw); padding: 8px max(20px, calc(50vw - 50% + 20px)) 0; }
+.tabs button { padding: 14px 14px 12px; }
+.retro { text-align: left; border-left: 2px solid var(--gold); padding: 4px 0 4px 16px; }
+.explain summary { font-size: .88rem; }
+/* bunntekst */
+.foot { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 40px; max-width: none; margin-top: 80px; padding-top: 36px; border-top: 1px solid var(--line); font-size: .86rem; color: var(--muted); }
+.foot h4 { margin: 0 0 8px; font: 400 .7rem/1.4 var(--f-caps); letter-spacing: .2em; text-transform: uppercase; color: var(--ink); }
+.foot p { margin: 0; line-height: 1.7; }
+.foot-brand { display: grid; gap: 12px; align-content: start; }
+.foot-brand .logo-sm { cursor: default; }
+@media (max-width: 760px) {
+  .tabs { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; gap: 0; padding-top: 2px; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { flex: none; white-space: nowrap; padding: 13px 12px 11px; font-size: .68rem; }
+}
+@media (max-width: 760px) { .foot { grid-template-columns: minmax(0, 1fr); gap: 24px; } .tabs { top: 60px; } .topbar { min-height: 60px; padding-block: 10px; } }
 </style>
 </head>
 <body>
@@ -521,7 +574,7 @@ body { line-height: 1.7; }
 <div class="sky" id="sky" aria-hidden="true"></div>
 <div class="wrap">
   <div class="topbar">
-    <button type="button" class="logo-sm" id="home" hidden aria-label="Til forsiden">Stjernehimmel</button>
+    <button type="button" class="logo-sm" id="home" aria-label="Til forsiden"><span class="logo-mark" aria-hidden="true">✦</span>Stjernehimmel</button>
     <div class="palettes">
       <button type="button" class="palicon" id="paltoggle" aria-haspopup="true" aria-expanded="false" aria-controls="palmenu" aria-label="Velg fargetema" title="Fargetema">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3.2c-5 0-8.8 3.7-8.8 8.4 0 4.6 3.7 8.2 8.4 8.2 1.3 0 2-.8 2-1.8 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8h2.2c2.6 0 4.2-1.7 4.2-4.1C20.8 6.3 16.9 3.2 12 3.2z"/><circle cx="7.6" cy="11.4" r="1.3" fill="currentColor"/><circle cx="10" cy="7.6" r="1.3" fill="currentColor"/><circle cx="14.6" cy="7.4" r="1.3" fill="currentColor"/><circle cx="17.4" cy="10.6" r="1.3" fill="currentColor"/></svg>
@@ -616,7 +669,11 @@ body { line-height: 1.7; }
     <main id="out"></main>
   </section>
 
-  <footer>Posisjonene beregnes med astronomy-engine og stemmer med Swiss Ephemeris innenfor et par hundredels grader. Stedslisten bygger på GeoNames og kommunegrensene for 2024. Tolkningene er generelle beskrivelser av tradisjonell vestlig (tropisk) astrologi, ment for refleksjon og underholdning.</footer>
+  <footer class="foot">
+    <div class="foot-brand"><span class="logo-sm"><span class="logo-mark" aria-hidden="true">✦</span>Stjernehimmel</span><p>Personlig stjernekart, horoskop og kalender, regnet ut fra når og hvor du ble født.</p></div>
+    <div class="foot-col"><h4>Om beregningene</h4><p>Posisjonene beregnes med astronomy-engine og stemmer med Swiss Ephemeris innenfor et par hundredels grader. Stedslisten bygger på GeoNames og kommunegrensene for 2024.</p></div>
+    <div class="foot-col"><h4>Om tolkningene</h4><p>Tolkningene er generelle beskrivelser av tradisjonell vestlig (tropisk) astrologi, ment for refleksjon og underholdning.</p></div>
+  </footer>
 </div>
 <div class="toast" id="toast" hidden></div>
 <dialog class="more" id="dlg" aria-labelledby="dlg-title"><div class="dlg-frame"><span class="cn tl">✦</span><span class="cn tr">✦</span><span class="cn bl">✦</span><span class="cn br">✦</span><button type="button" class="dlg-x" id="dlg-x" aria-label="Lukk">×</button><div class="dlg-in"><div id="dlg-body"></div></div></div></dialog>
@@ -1547,7 +1604,6 @@ function render(c, p, isExample) {
 
   // 1. Oppsummering
   h += '<header class="r-head fade">';
-  if (isExample) h += '<span class="badge">Eksempel</span>';
   h += '<h1 class="r-name">' + esc(name) + '</h1>';
   h += '<p class="meta">Født ' + dateTxt + (p.place ? ' i ' + esc(p.place) : '') + '</p>';
   function arch(icon, label, s, line, role) {
@@ -1561,7 +1617,7 @@ function render(c, p, isExample) {
   h += arch(ORN.rising, 'Ascendanten', asc, asc ? asc.kw[0] + ' og ' + asc.kw[1] + ' utad' : '', 'asc');
   h += '</div>';
   h += '<div class="guide"><p class="eyebrow">Ny i astrologi? Start her</p><ul><li><b>Solen</b> viser hvem du er innerst inne.</li><li><b>Månen</b> viser følelsene dine og hva du trenger.</li><li><b>Ascendanten</b> viser hvordan andre ser deg første gang.</li></ul><p>Trykk på kortene over for å lese mer. Fanene under tar deg til horoskopet, kalenderen og resten av profilen.</p></div>';
-  if (isExample) h += '<p class="note">Dette er et eksempel. Trykk «Endre fødselsdata» og fyll inn dine egne for å se ditt.</p>';
+  if (isExample) h += '<p class="exnote"><span class="badge">Eksempel</span> Dette er et eksempel. Trykk «Endre fødselsdata» for å se ditt eget.</p>';
   if (!c.hasTime) {
     var m0 = signOf(c.moonRange[0]), m1 = signOf(c.moonRange[1]);
     h += '<p class="note">Uten klokkeslett kan vi ikke finne ascendanten og husene dine, fordi himmelen snur seg en hel runde i løpet av døgnet. Solen og månen er regnet for kl. 12:00.' +
@@ -1958,12 +2014,12 @@ $('form').addEventListener('submit', function (e) {
 var showingExample = false;
 function showResult(isExample) {
   showingExample = isExample;
-  $('landing').hidden = true; $('result').hidden = false; $('home').hidden = false;
+  $('landing').hidden = true; $('result').hidden = false;
   $('save').hidden = isExample;
   window.scrollTo(0, 0);
 }
 function showLanding() {
-  $('result').hidden = true; $('landing').hidden = false; $('home').hidden = true;
+  $('result').hidden = true; $('landing').hidden = false;
   window.scrollTo(0, 0);
 }
 $('edit').addEventListener('click', function () { if (showingExample) resetForm(); showLanding(); });
@@ -2104,7 +2160,7 @@ document.querySelectorAll('[data-orn]').forEach(function (el) {
 
 // Blinkende stjerner over hele himmelen.
 (function sky() {
-  var box = $('sky'), n = window.innerWidth < 600 ? 30 : 60, html = '';
+  var box = $('sky'), n = window.innerWidth < 600 ? 18 : 34, html = '';
   for (var i = 0; i < n; i++) {
     var spark = Math.random() < 0.35, size = spark ? 7 + Math.random() * 9 : 1.5 + Math.random() * 2.5;
     html += '<span class="st ' + (spark ? 'spark' : 'dot') + (Math.random() < 0.3 ? ' rose' : '') + '" style="left:' + (Math.random() * 100).toFixed(2) + '%;top:' + (Math.random() * 100).toFixed(2) + '%;--s:' + size.toFixed(1) + 'px;--d:' + (2 + Math.random() * 4).toFixed(2) + 's;--delay:-' + (Math.random() * 6).toFixed(2) + 's">' + (spark ? '✦' : '') + '</span>';
