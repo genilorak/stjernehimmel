@@ -566,6 +566,29 @@ button { transition: background-color .2s ease, border-color .2s ease, color .2s
   .tabs button { flex: none; white-space: nowrap; padding: 13px 12px 11px; font-size: .68rem; }
 }
 @media (max-width: 760px) { .foot { grid-template-columns: minmax(0, 1fr); gap: 24px; } .tabs { top: 60px; } .topbar { min-height: 60px; padding-block: 10px; } }
+/* v15: zen – rolig bakgrunn og rolig bevegelse */
+.sky { background: radial-gradient(70vmax 50vmax at 50% -10%, color-mix(in srgb, var(--blob1) 55%, transparent), transparent 70%), radial-gradient(60vmax 40vmax at 50% 115%, color-mix(in srgb, var(--blob3) 45%, transparent), transparent 70%) !important; animation: none !important; }
+.st { opacity: .22 !important; }
+.st.dot { box-shadow: none; }
+.st.spark { font-size: calc(var(--s) * .7); }
+.const { opacity: .06; }
+.sprig { opacity: .22; }
+.burst { opacity: .14; }
+.mothwrap { opacity: .55; }
+@media (prefers-reduced-motion: no-preference) {
+  .st { animation: breathe calc(var(--d) * 3) ease-in-out var(--delay) infinite; }
+  @keyframes breathe { 0%, 100% { opacity: .1; } 50% { opacity: .32; } }
+  .sparkle { animation: none; }
+  .fade { animation: calmin .9s cubic-bezier(.2, .7, .2, 1) both; }
+  @keyframes calmin { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  button.arch:hover, button.arch:focus-visible { transform: translateY(-2px); }
+  button, .tcard, .arch { transition-duration: .35s; }
+}
+:root { --shadow-soft: 0 1px 2px rgba(20, 24, 50, .03), 0 12px 32px -18px rgba(20, 24, 50, .14); }
+.whatyouget, .guide, .moonstrip, .rec, .tcard, .side, .mlist, .cal, .houses, .gloss { border-color: color-mix(in srgb, var(--line) 75%, transparent); }
+.topbar, .tabs { border-bottom-color: color-mix(in srgb, var(--line) 50%, transparent); }
+.lead, .lede { color: color-mix(in srgb, var(--muted) 90%, var(--bg)); }
+.divider { opacity: .7; }
 </style>
 </head>
 <body>
@@ -2160,7 +2183,7 @@ document.querySelectorAll('[data-orn]').forEach(function (el) {
 
 // Blinkende stjerner over hele himmelen.
 (function sky() {
-  var box = $('sky'), n = window.innerWidth < 600 ? 18 : 34, html = '';
+  var box = $('sky'), n = window.innerWidth < 600 ? 10 : 18, html = '';
   for (var i = 0; i < n; i++) {
     var spark = Math.random() < 0.35, size = spark ? 7 + Math.random() * 9 : 1.5 + Math.random() * 2.5;
     html += '<span class="st ' + (spark ? 'spark' : 'dot') + (Math.random() < 0.3 ? ' rose' : '') + '" style="left:' + (Math.random() * 100).toFixed(2) + '%;top:' + (Math.random() * 100).toFixed(2) + '%;--s:' + size.toFixed(1) + 'px;--d:' + (2 + Math.random() * 4).toFixed(2) + 's;--delay:-' + (Math.random() * 6).toFixed(2) + 's">' + (spark ? '✦' : '') + '</span>';
