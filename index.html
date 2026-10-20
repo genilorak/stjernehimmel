@@ -39,18 +39,6 @@
   --f-body: "Jost", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
   --r: 22px;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0F1730; --bg2: #16204A; --panel: #131D3D; --ink: #EFE6D2; --muted: #AEB2C8; --line: #2C3A66; --rose: #E3C788; --rose-fill: #CFAE6A; --rose-soft: #1F2A52; --lilac: #A9B2E6; --gold: #D4B474; --btn: #D4B474; --btn-ink: #0F1730; --star: #E9D9AE; --star2: #A9B2E6; --fire: #E8A08A; --earth: #B7CC92; --air: #9EC1E6; --water: #B7AEEB; --blob1: rgba(80, 100, 190, .22); --blob2: rgba(212, 180, 116, .08); --blob3: rgba(120, 90, 170, .18);
-    --shadow: 0 24px 50px -30px rgba(0, 0, 0, .7);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0F1730; --bg2: #16204A; --panel: #131D3D; --ink: #EFE6D2; --muted: #AEB2C8; --line: #2C3A66; --rose: #E3C788; --rose-fill: #CFAE6A; --rose-soft: #1F2A52; --lilac: #A9B2E6; --gold: #D4B474; --btn: #D4B474; --btn-ink: #0F1730; --star: #E9D9AE; --star2: #A9B2E6; --fire: #E8A08A; --earth: #B7CC92; --air: #9EC1E6; --water: #B7AEEB; --blob1: rgba(80, 100, 190, .22); --blob2: rgba(212, 180, 116, .08); --blob3: rgba(120, 90, 170, .18);
-  --shadow: 0 24px 50px -30px rgba(0, 0, 0, .7);
-  color-scheme: dark;
-}
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body {
@@ -2017,6 +2005,7 @@ function run(p, isExample) {
     if (typeof Astronomy === 'undefined') throw new Error('lib');
     var c = AstroCore.chart(p);
     render(c, p, isExample);
+    if (!isExample) rememberPerson(p);
     return true;
   } catch (e) {
     $('out').innerHTML = '<p class="note">' + (e.message === 'lib' ? 'Beregningsbiblioteket ble ikke lastet. Sjekk nettforbindelsen og last siden på nytt.' : 'Noe gikk galt i beregningen. Sjekk dato, tid og sted.') + '</p>';
@@ -2054,8 +2043,31 @@ function resetForm() {
 }
 
 // --- Lagrede profiler: privat per bruker i db, ellers i nettleseren ---
+// Nøklene under må aldri byttes ut: de holder på det brukeren har lagret når siden oppdateres.
 var profiles = [], currentKey = null, col = null;
 var LS = 'fodselshimmel-profiler';
+var LAST = 'stjernehimmel-sist', LAST_V = 1;
+var PERSON_FIELDS = ['name', 'y', 'm', 'd', 'h', 'mi', 'hasTime', 'place', 'lat', 'lon', 'tz', 'system'];
+function cleanPerson(x) {
+  if (!x || !x.y || !x.m || !x.d) return null;
+  var o = {}; PERSON_FIELDS.forEach(function (k) { if (x[k] != null) o[k] = x[k]; });
+  o.y = +o.y; o.m = +o.m; o.d = +o.d; o.h = +(o.h || 0); o.mi = +(o.mi || 0);
+  o.hasTime = o.hasTime !== false; o.lat = +(o.lat || 0); o.lon = +(o.lon || 0);
+  o.tz = o.tz || 'Europe/Oslo'; o.system = o.system || 'placidus';
+  return o;
+}
+function rememberPerson(p) {
+  var o = cleanPerson(p); if (!o) return;
+  try { localStorage.setItem(LAST, JSON.stringify({ v: LAST_V, key: currentKey, person: o })); } catch (e) {}
+}
+function recallPerson() {
+  try {
+    var r = JSON.parse(localStorage.getItem(LAST) || 'null');
+    if (!r) return null;
+    // Eldre formater oversettes her når feltene endres; ukjent innhold gir null i stedet for feil.
+    return { key: r.key || null, person: cleanPerson(r.person || r) };
+  } catch (e) { return null; }
+}
 function lsRead() { try { return JSON.parse(localStorage.getItem(LS) || '[]'); } catch (e) { return []; } }
 function lsWrite(list) { try { localStorage.setItem(LS, JSON.stringify(list)); } catch (e) {} }
 function toast(msg) { var t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { t.hidden = true; }, 2600); }
@@ -2198,14 +2210,16 @@ var EXAMPLE = { name: 'Eksempel', y: 1995, m: 3, d: 14, h: 8, mi: 30, hasTime: t
 var KREM_CSS = '--bg: #F4EEE2;--bg2: #ECE3D1;--panel: #FBF7EF;--ink: #1F2547;--muted: #5C5F77;--line: #DCCFB3;--rose: #87672C;--rose-fill: #C9A45C;--rose-soft: #EFE5CF;--lilac: #6B6496;--gold: #B38D45;--btn: #1F2547;--btn-ink: #F4EEE2;--star: #B38D45;--star2: #8E86B8;--fire: #A55E4A;--earth: #6B7D4A;--air: #4B6D96;--water: #6B5E9E;--blob1: rgba(201, 164, 92, .16);--blob2: rgba(142, 134, 184, .14);--blob3: rgba(201, 164, 92, .12);--shadow:0 24px 50px -34px rgba(31,37,71,.35)';
 var MID_CSS = '--bg: #0F1730;--bg2: #16204A;--panel: #131D3D;--ink: #EFE6D2;--muted: #AEB2C8;--line: #2C3A66;--rose: #E3C788;--rose-fill: #CFAE6A;--rose-soft: #1F2A52;--lilac: #A9B2E6;--gold: #D4B474;--btn: #D4B474;--btn-ink: #0F1730;--star: #E9D9AE;--star2: #A9B2E6;--fire: #E8A08A;--earth: #B7CC92;--air: #9EC1E6;--water: #B7AEEB;--blob1: rgba(80, 100, 190, .22);--blob2: rgba(212, 180, 116, .08);--blob3: rgba(120, 90, 170, .18);--shadow:0 24px 50px -30px rgba(0,0,0,.7)';
 var PALETTES = {
-  krem: { n: 'Gull', sw: ['#F4EEE2', '#1F2547', '#C9A45C', '#ECE3D1'], all: 'light' },
-  skog: { n: 'Skog', sw: ['#0A3323', '#839958', '#F7F4D5', '#D3968C'],
-    all: { bg: '#0A3323', bg2: '#0F3B2B', panel: '#0E3A29', ink: '#F7F4D5', muted: '#B8C2A2', line: '#24533D', rose: '#D8C98E', 'rose-fill': '#A3B572', 'rose-soft': '#134433', lilac: '#E0ADA4', gold: '#D4B474', btn: '#C3CF94', 'btn-ink': '#0A3323', star: '#F0E6B8', star2: '#D3968C', fire: '#EBA594', earth: '#C3D29E', air: '#9ECDD6', water: '#8FC0C9', blob1: 'rgba(16, 86, 102, .32)', blob2: 'rgba(131, 153, 88, .14)', blob3: 'rgba(211, 150, 140, .07)', shadow: '0 24px 50px -30px rgba(0, 0, 0, .7)' } },
-  midnatt: { n: 'Natthimmel', sw: ['#0F1730', '#D4B474', '#16204A', '#EFE6D2'], all: 'dark' },
-  lavendel: { n: 'Lavendel', sw: ['#E6DDF4', '#4B3A86', '#C9A45C', '#F2D9EA'],
-    all: { bg: '#ECE6F6', bg2: '#F4E2EE', panel: '#F8F4FC', ink: '#2E2457', muted: '#5F577F', line: '#D6CBE8', rose: '#5E4596', 'rose-fill': '#C9A45C', 'rose-soft': '#E4DAF3', lilac: '#5C4C9C', gold: '#A98436', btn: '#4B3A86', 'btn-ink': '#F8F4FC', star: '#B8924A', star2: '#9F86D4', fire: '#B4644F', earth: '#667F4A', air: '#4A6E9C', water: '#6B55A8', blob1: 'rgba(240, 170, 210, .35)', blob2: 'rgba(160, 140, 230, .35)', blob3: 'rgba(150, 200, 240, .30)', shadow: '0 24px 50px -34px rgba(60, 40, 120, .35)' } },
-  plomme: { n: 'Plomme', sw: ['#2B1626', '#D8B678', '#3A1F33', '#F2E6D8'],
-    all: { bg: '#2A1525', bg2: '#3A1E33', panel: '#331B2E', ink: '#F2E6D8', muted: '#C4AFBB', line: '#4E2E46', rose: '#E6C58E', 'rose-fill': '#D2AE6E', 'rose-soft': '#40243A', lilac: '#D3B4E0', gold: '#D8B678', btn: '#D8B678', 'btn-ink': '#2A1525', star: '#F0DDB2', star2: '#D3B4E0', fire: '#F0A994', earth: '#C3D29E', air: '#A9C9E6', water: '#D3B4E0', blob1: 'rgba(160, 70, 120, .22)', blob2: 'rgba(216, 182, 120, .07)', blob3: 'rgba(110, 60, 120, .25)', shadow: '0 24px 50px -30px rgba(0, 0, 0, .7)' } }
+  krem: { n: 'Gull', sw: ['#F6F1E7', '#CDAE70', '#EFE7D8', '#3A4062'],
+    all: { bg: '#F6F1E7', bg2: '#EFE7D8', panel: '#FCF9F3', ink: '#2E3350', muted: '#686A7E', line: '#E3D8C3', rose: '#8A6C35', 'rose-fill': '#CDAE70', 'rose-soft': '#F2EBDC', lilac: '#7A74A0', gold: '#BB9A5A', btn: '#454B6E', 'btn-ink': '#F8F4EC', star: '#C2A260', star2: '#A9A2CA', fire: '#B0705E', earth: '#7A8A5C', air: '#5E7DA0', water: '#7B70A8', blob1: 'rgba(205, 174, 112, .16)', blob2: 'rgba(169, 162, 202, .12)', blob3: 'rgba(205, 174, 112, .10)', shadow: '0 20px 44px -34px rgba(46, 51, 80, .25)' } },
+  skog: { n: 'Skog', sw: ['#EEF1E6', '#A7B888', '#D3968C', '#3F5E48'],
+    all: { bg: '#EEF1E6', bg2: '#E4EAD9', panel: '#F8F9F2', ink: '#26402F', muted: '#5F6F61', line: '#D3DCC6', rose: '#56713F', 'rose-fill': '#A7B888', 'rose-soft': '#E4EBD8', lilac: '#B07C73', gold: '#AD9455', btn: '#4A6852', 'btn-ink': '#F8F6EA', star: '#B39A5C', star2: '#D3A096', fire: '#B06E60', earth: '#6F8A4E', air: '#4F7F8C', water: '#5E8794', blob1: 'rgba(131, 153, 88, .18)', blob2: 'rgba(211, 150, 140, .12)', blob3: 'rgba(79, 127, 140, .08)', shadow: '0 20px 44px -34px rgba(38, 64, 47, .25)' } },
+  midnatt: { n: 'Himmel', sw: ['#E9EDF4', '#9AA9D6', '#C9A96A', '#3D4C7A'],
+    all: { bg: '#E9EDF4', bg2: '#DFE5EF', panel: '#F6F8FB', ink: '#283452', muted: '#5F6883', line: '#D0D8E6', rose: '#4B5E91', 'rose-fill': '#C9A96A', 'rose-soft': '#DFE6F2', lilac: '#6F78B0', gold: '#AE9055', btn: '#4A5884', 'btn-ink': '#F6F8FB', star: '#B39858', star2: '#94A2D4', fire: '#B26C5C', earth: '#6E8352', air: '#4A72A2', water: '#6A69AE', blob1: 'rgba(140, 160, 215, .22)', blob2: 'rgba(201, 169, 106, .10)', blob3: 'rgba(170, 150, 210, .14)', shadow: '0 20px 44px -34px rgba(40, 52, 82, .25)' } },
+  lavendel: { n: 'Lavendel', sw: ['#EDE7F6', '#A893D8', '#C9A45C', '#5A4A92'],
+    all: { bg: '#EDE7F6', bg2: '#F3E5EF', panel: '#F9F6FC', ink: '#352B5E', muted: '#655D84', line: '#DACFEA', rose: '#5E4596', 'rose-fill': '#C9A45C', 'rose-soft': '#E6DDF3', lilac: '#5C4C9C', gold: '#A98436', btn: '#5A4A92', 'btn-ink': '#F9F6FC', star: '#B8924A', star2: '#A893D8', fire: '#B4644F', earth: '#667F4A', air: '#4A6E9C', water: '#6B55A8', blob1: 'rgba(240, 175, 212, .28)', blob2: 'rgba(165, 145, 230, .26)', blob3: 'rgba(160, 205, 240, .22)', shadow: '0 20px 44px -34px rgba(60, 40, 120, .25)' } },
+  plomme: { n: 'Rosé', sw: ['#F4EAEC', '#D2A4BC', '#CFAE76', '#6E3C5E'],
+    all: { bg: '#F4EAEC', bg2: '#EEDFE5', panel: '#FBF6F7', ink: '#48293F', muted: '#7A6171', line: '#E6D3DB', rose: '#874D70', 'rose-fill': '#CFAE76', 'rose-soft': '#F0E1E8', lilac: '#9A72A8', gold: '#B08E58', btn: '#7A4A6A', 'btn-ink': '#FBF6F7', star: '#B8955C', star2: '#C9A0BE', fire: '#B86A5E', earth: '#74844F', air: '#5B7AA0', water: '#8A6AA8', blob1: 'rgba(215, 155, 185, .20)', blob2: 'rgba(207, 174, 118, .10)', blob3: 'rgba(175, 135, 195, .13)', shadow: '0 20px 44px -34px rgba(72, 41, 63, .25)' } }
 };
 (function palettes() {
   function toks(t) { return Object.keys(t).map(function (k) { return '--' + k + ':' + t[k]; }).join(';'); }
@@ -2216,7 +2230,7 @@ var PALETTES = {
     if (P.all === 'light' || P.all === 'dark') {
       body = (P.all === 'light' ? KREM_CSS : MID_CSS) + ';color-scheme:' + P.all;
     } else {
-      var isDark = ['plomme', 'skog'].indexOf(k) >= 0;
+      var isDark = false;
       body = toks(P.all) + ';color-scheme:' + (isDark ? 'dark' : 'light');
     }
     css += sel + '{' + body + '}';
@@ -2245,6 +2259,12 @@ var PALETTES = {
   var saved = 'krem';
   try { saved = localStorage.getItem('fodselshimmel-stil') || 'krem'; } catch (e) {}
   apply(saved);
+})();
+// Husk siste person: åpner resultatet direkte neste gang siden lastes, også etter oppdateringer.
+(function restore() {
+  var r = recallPerson(); if (!r || !r.person) return;
+  currentKey = r.key; fillForm(r.person); renderChips();
+  if (run(r.person, false)) showResult(false);
 })();
 </script>
 
