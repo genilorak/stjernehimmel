@@ -577,6 +577,56 @@ button { transition: background-color .2s ease, border-color .2s ease, color .2s
 .topbar, .tabs { border-bottom-color: color-mix(in srgb, var(--line) 50%, transparent); }
 .lead, .lede { color: color-mix(in srgb, var(--muted) 90%, var(--bg)); }
 .divider { opacity: .7; }
+/* v16: syklus */
+#cyc-body { display: grid; gap: 22px; }
+#cyc-body .card { padding: 24px 26px; }
+#cyc-body h3 { margin: 0 0 10px; font: 500 1.35rem/1.2 var(--f-display); }
+.cy-k { display: block; font: 400 .72rem/1.4 var(--f-caps); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.cy-s { color: var(--muted); font-size: .92rem; margin: 6px 0 0; display: block; }
+.cy-top { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.cy-top .card { text-align: center; }
+.cy-big { display: block; font: 500 3rem/1 var(--f-display); color: var(--ink); }
+.cy-mid { display: block; font: 500 1.45rem/1.2 var(--f-display); }
+.cy-ph { display: inline-block; margin-top: 10px; padding: 3px 14px; border-radius: 999px; background: var(--rose-soft); color: var(--rose); font-size: .88rem; }
+.cy-advice ul, .cy-doc ul { margin: 8px 0 0; padding-left: 1.2em; }
+.cy-advice li, .cy-doc li { margin: 4px 0; }
+.cy-calhead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.cy-legend { font-size: .85rem; color: var(--muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.cy-legend .lg { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-left: 8px; }
+.lg.mens { background: #D3968C; } .lg.fert { background: color-mix(in srgb, var(--earth) 35%, transparent); } .lg.ov { border: 2px solid var(--gold); }
+.cy-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 12px; }
+.cy-wd { text-align: center; font: 400 .7rem/1 var(--f-caps); letter-spacing: .12em; color: var(--muted); padding-bottom: 4px; }
+.cy-d { position: relative; aspect-ratio: 1; max-height: 54px; border-radius: 50%; border: 1px solid transparent; background: transparent; color: var(--ink); font: 400 .95rem/1 var(--f-body); cursor: pointer; padding: 0; justify-self: center; width: 100%; max-width: 54px; }
+.cy-d:hover:not(:disabled) { border-color: var(--line); }
+.cy-d:disabled { cursor: default; }
+.cy-d.fut { color: var(--muted); }
+.cy-d.mens { background: #D3968C; color: #fff; }
+.cy-d.mens.est { background: color-mix(in srgb, #D3968C 30%, transparent); color: var(--ink); }
+.cy-d.fert { background: color-mix(in srgb, var(--earth) 22%, transparent); }
+.cy-d.ov { background: color-mix(in srgb, var(--earth) 22%, transparent); box-shadow: inset 0 0 0 2px var(--gold); }
+.cy-d.today { font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
+.cy-d.sel { outline: 1.5px solid var(--ink); outline-offset: 2px; }
+.cy-d .dot { position: absolute; bottom: 5px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--gold); }
+.cy-row { margin-top: 16px; }
+.cy-seg, .cy-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.cy-seg button, .cy-chips button { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 999px; padding: 7px 15px; font: 400 .92rem/1.2 var(--f-body); cursor: pointer; letter-spacing: 0; text-transform: none; }
+.cy-seg button[aria-pressed="true"], .cy-chips button[aria-pressed="true"] { background: var(--rose-soft); border-color: var(--rose-fill); color: var(--rose); }
+.cy-startbtn { margin-top: 14px; }
+.cy-tips { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+.cy-tips p { margin: 6px 0; }
+.cy-form { display: grid; gap: 14px; margin: 14px 0 18px; }
+.cy-form label { display: grid; gap: 6px; font-size: .95rem; }
+.cy-form input { max-width: 240px; }
+.cy-help { font-size: .85rem; color: var(--muted); }
+.cy-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+#cyc-body details summary { cursor: pointer; font: 500 1.2rem/1.3 var(--f-display); }
+.cy-note { font-size: .88rem; color: var(--muted); text-align: center; max-width: 60ch; margin: 0 auto; }
+@media (max-width: 640px) {
+  .cy-top { grid-template-columns: 1fr; gap: 12px; }
+  #cyc-body .card { padding: 20px 18px; }
+  .cy-grid { gap: 4px; }
+}
+
 </style>
 </head>
 <body>
@@ -1640,13 +1690,14 @@ function render(c, p, isExample) {
 
 
   // Dagens horoskop
-  var tabs = [['horo', 'I dag'], ['mnd', 'Måneden'], ['kal', 'Kalender'], ['me', 'Portrett'], ['kart', 'Sol, måne og kart']].concat(c.hasTime ? [['hus', 'Husene']] : []).concat([['ord', 'Ordliste']]);
+  var tabs = [['horo', 'I dag'], ['mnd', 'Måneden'], ['kal', 'Kalender'], ['syk', 'Syklus'], ['me', 'Portrett'], ['kart', 'Sol, måne og kart']].concat(c.hasTime ? [['hus', 'Husene']] : []).concat([['ord', 'Ordliste']]);
   h += '<nav class="tabs" role="tablist" aria-label="Deler av profilen">' + tabs.map(function (x, i) { return '<button type="button" role="tab" data-tab="' + x[0] + '" aria-selected="' + (i === 0) + '">' + x[1] + '</button>'; }).join('') + '</nav>';
   h += '<div class="pane" data-pane="horo"><section class="block fade" id="horo"><div class="b-head"><h2>Dagens horoskop</h2><p class="lead">Laget for deg ut fra hvor planetene faktisk står, sammenlignet med ditt eget stjernekart.</p></div>' +
     '<div class="daynav" role="group" aria-label="Velg dag"><button type="button" data-day="-1">I går</button><button type="button" data-day="0">I dag</button><button type="button" data-day="1">I morgen</button></div><div class="horo" id="horo-body"></div></section></div>';
   h += '<div class="pane" data-pane="mnd" hidden><section class="block fade"><div class="b-head"><h2>Månedens horoskop</h2><p class="lead">De store linjene for måneden: hvor solen lyser opp kartet ditt, hvilke planeter som treffer deg, og når.</p></div>' +
     '<div class="daynav" role="group" aria-label="Velg måned"><button type="button" data-month="0">Denne måneden</button><button type="button" data-month="1">Neste måned</button></div><div class="horo" id="month-body"></div></section></div>';
   h += '<div class="pane" data-pane="kal" hidden><section class="block fade"><div class="b-head"><h2>Viktige datoer</h2><p class="lead">Nymåner, fullmåner, formørkelser, retrograde planeter og når solen skifter tegn de neste fire månedene, og hva hver dato betyr for deg.</p></div><div id="cal-body"></div></section></div>';
+  h += '<div class="pane" data-pane="syk" hidden><section class="block fade"><div class="b-head"><h2>Syklusen din</h2><p class="lead">En liten, privat dagbok for mensen. Se hvor i syklusen du er, når neste mens og de fruktbare dagene er ventet, og få råd for hvordan du har det.</p></div><div id="cyc-body"></div></section></div>';
   h += '<div class="pane" data-pane="me" hidden>' + portrait(c, sun, moon, asc).replace(ORN.divider, '') + '</div>';
 
   // 2. Stjernekartet
@@ -1698,8 +1749,201 @@ function render(c, p, isExample) {
   h += '</dl></section></div>';
   $('out').innerHTML = h;
   current = { c: c, p: p };
-  renderHoro(0); renderMonth(0); renderCal();
+  renderHoro(0); renderMonth(0); renderCal(); renderCycle();
 }
+
+// --- Syklus: en liten, privat menstruasjonsdagbok (lagres bare i denne nettleseren) ---
+var CYC_KEY = 'stjernehimmel-syklus', CYC_V = 1;
+var CYC_SYM = [
+  ['krampe', 'Magesmerter', 'Legg en varmeflaske eller et varmt håndkle på magen, og prøv en rolig gåtur. Reseptfrie smertestillende virker best om du tar dem tidlig, etter pakningsvedlegget.'],
+  ['hode', 'Hodepine', 'Drikk et ekstra glass vann, spis regelmessig og ta en pause i et rolig, mørkt rom hvis du kan.'],
+  ['oppblast', 'Oppblåst', 'Små måltider, litt mindre salt og kullsyre, og en kort gåtur etter maten hjelper mange.'],
+  ['bryst', 'Ømme bryster', 'En myk, god BH og litt mindre kaffe og salt kan lette.'],
+  ['trott', 'Trøtt', 'Legg deg litt tidligere i kveld, og få med deg dagslys ute. Under mensen er jernrik mat som bønner, grønne blader og kjøtt lurt.'],
+  ['humor', 'Humørsvingninger', 'Bevegelse, søvn og noe hyggelig å se frem til hjelper. Si gjerne fra til de rundt deg hvordan du har det.'],
+  ['kviser', 'Kviser', 'Vask huden mildt morgen og kveld, og la være å klemme.'],
+  ['rygg', 'Vondt i ryggen', 'Varme, rolig tøying og litt bevegelse løser ofte opp.'],
+  ['kvalme', 'Kvalme', 'Spis små porsjoner, prøv ingefærte og få litt frisk luft.'],
+  ['sug', 'Søtsug', 'Regelmessige måltider med litt protein og fiber holder blodsukkeret jevnere. Frukt og nøtter er fine småmåltider.'],
+  ['sovn', 'Dårlig søvn', 'Kjølig soverom, faste leggetider og mindre skjerm og koffein om kvelden.'],
+  ['utflod', 'Mer utflod', 'Klar, tøyelig utflod er vanlig rundt eggløsningen. Kontakt lege hvis den lukter vondt, klør eller endrer farge.']
+];
+var CYC_FLOW = ['Ingen', 'Lett', 'Middels', 'Kraftig'];
+var CYC_PHASE = {
+  mens: ['Mensdager', 'Kroppen fornyer seg, og mange trenger mer ro nå.', ['Varme på magen og rolige turer gjør godt.', 'Spis jernrik mat og drikk nok vann.', 'Gi deg selv lov til å ta det litt med ro.']],
+  etter: ['Etter mensen', 'Hormonene stiger, og mange får mer energi og lyst til å sette i gang.', ['En fin tid for nye planer og hardere trening.', 'Mange føler seg sosiale og klare i hodet nå.']],
+  fert: ['Fruktbare dager', 'Rundt eggløsningen er sjansen for graviditet størst.', ['Noen merker mer energi og lyst, litt vondt på én side av magen eller mer utflod.', 'Vil du ikke bli gravid, bruk sikker prevensjon. Denne oversikten er ikke prevensjon.']],
+  for: ['Før mensen', 'Kroppen forbereder seg på neste mens. Den siste uken kan det komme PMS.', ['Spis regelmessig, og kutt litt ned på salt, sukker og koffein.', 'Prioriter søvn og rolig bevegelse.', 'Vær ekstra snill med deg selv.']],
+  sen: ['Mensen kan komme', 'Mensen er ventet nå. Små forskyvninger på noen dager er helt vanlig.', ['Stress, sykdom og reiser kan flytte mensen.', 'Kan du være gravid, kan en graviditetstest gi svar.']]
+};
+
+function cycIso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function cycDate(s) { var a = s.split('-').map(Number); return new Date(a[0], a[1] - 1, a[2]); }
+function cycAdd(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+function cycDiff(a, b) { return Math.round((b - a) / 864e5); }
+function cycFmt(d) { return d.getDate() + '. ' + ['jan.', 'feb.', 'mars', 'april', 'mai', 'juni', 'juli', 'aug.', 'sep.', 'okt.', 'nov.', 'des.'][d.getMonth()]; }
+
+function cycLoad() {
+  var s = null;
+  try { s = JSON.parse(localStorage.getItem(CYC_KEY) || 'null'); } catch (e) {}
+  s = s && typeof s === 'object' ? s : {};
+  // Eldre formater oversettes her når feltene endres.
+  return {
+    v: CYC_V,
+    starts: (Array.isArray(s.starts) ? s.starts : []).filter(function (x) { return /^\d{4}-\d\d-\d\d$/.test(x); }).sort(),
+    plen: Math.min(10, Math.max(2, +s.plen || 5)),
+    clen: Math.min(45, Math.max(20, +s.clen || 28)),
+    days: s.days && typeof s.days === 'object' ? s.days : {}
+  };
+}
+function cycSave(s) { try { localStorage.setItem(CYC_KEY, JSON.stringify(s)); } catch (e) {} }
+var cycSel = null;
+
+function cycStats(s) {
+  var gaps = [];
+  for (var i = 1; i < s.starts.length; i++) {
+    var g = cycDiff(cycDate(s.starts[i - 1]), cycDate(s.starts[i]));
+    if (g >= 18 && g <= 60) gaps.push(g);
+  }
+  gaps = gaps.slice(-6);
+  var L = gaps.length ? Math.round(gaps.reduce(function (a, b) { return a + b; }, 0) / gaps.length) : s.clen;
+  return { L: L, gaps: gaps };
+}
+// Status for en gitt dag: syklusdag, fase og forventet mens/eggløsning (anslag).
+function cycInfo(s, day) {
+  var st = cycStats(s), L = st.L, last = null;
+  s.starts.forEach(function (x) { if (cycDate(x) <= day) last = cycDate(x); });
+  if (!last) return null;
+  var cd = cycDiff(last, day) + 1, ov = L - 14, ph;
+  if (cd <= s.plen) ph = 'mens';
+  else if (cd > L) ph = 'sen';
+  else if (cd >= ov - 5 && cd <= ov + 1) ph = 'fert';
+  else if (cd < ov - 5) ph = 'etter';
+  else ph = 'for';
+  return { cd: cd, ph: ph, L: L, ov: ov, last: last, next: cycAdd(last, L), ovDate: cycAdd(last, ov - 1), gaps: st.gaps };
+}
+// Hva en dag i rutenettet skal vise: logget blødning eller anslått mens / fruktbar / eggløsning.
+function cycKind(s, day) {
+  var k = cycIso(day), rec = s.days[k];
+  if (rec && rec.flow > 0) return 'mens';
+  var inf = cycInfo(s, day); if (!inf) return '';
+  var cd = inf.cd;
+  var wrapped = cd > inf.L;
+  if (wrapped) cd = ((cd - 1) % inf.L) + 1; // sykluser som ikke er registrert ennå
+  if (cd <= s.plen) return !wrapped && day <= new Date() ? 'mens' : 'mens est';
+  if (cd === inf.ov) return 'ov';
+  if (cd >= inf.ov - 5 && cd <= inf.ov + 1) return 'fert';
+  return '';
+}
+
+function renderCycle() {
+  var box = $('cyc-body'); if (!box) return;
+  var s = cycLoad(), today = new Date(); today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  var h = '';
+  if (!s.starts.length) {
+    h += '<div class="cy-setup card"><h3>Kom i gang</h3><p>Fyll inn når siste mens startet, så regner vi ut resten. Du kan endre alt senere.</p>' +
+      '<div class="cy-form"><label>Første dag med siste mens<input type="date" id="cy-start" max="' + cycIso(today) + '"></label>' +
+      '<label>Hvor mange dager varer mensen?<input type="number" id="cy-plen" min="2" max="10" value="' + s.plen + '"></label>' +
+      '<label>Hvor mange dager er det vanligvis mellom hver mens?<input type="number" id="cy-clen" min="20" max="45" value="' + s.clen + '"><span class="cy-help">Vet du ikke, la 28 stå.</span></label></div>' +
+      '<button type="button" data-cy="setup">Start dagboken</button></div>';
+    h += cycPrivacy();
+    box.innerHTML = h; return;
+  }
+  var inf = cycInfo(s, today) || cycInfo(s, cycDate(s.starts[s.starts.length - 1]));
+  var P = CYC_PHASE[inf.ph], untilNext = cycDiff(today, inf.next);
+  var nextTxt = untilNext > 1 ? 'om ' + untilNext + ' dager' : untilNext === 1 ? 'i morgen' : untilNext === 0 ? 'i dag' : untilNext + ' dager sent';
+  if (untilNext < 0) nextTxt = Math.abs(untilNext) + (Math.abs(untilNext) === 1 ? ' dag' : ' dager') + ' over tiden';
+  var fs = cycAdd(inf.ovDate, -5), fe = cycAdd(inf.ovDate, 1);
+  if (fe < today) { fs = cycAdd(fs, inf.L); fe = cycAdd(fe, inf.L); }
+  h += '<div class="cy-top">' +
+    '<div class="card cy-now"><span class="cy-k">Syklusdag</span><span class="cy-big">' + inf.cd + '</span><span class="cy-ph ph-' + inf.ph + '">' + P[0] + '</span></div>' +
+    '<div class="card"><span class="cy-k">Neste mens</span><span class="cy-mid">ca. ' + cycFmt(inf.next) + '</span><span class="cy-s">' + nextTxt + '</span></div>' +
+    '<div class="card"><span class="cy-k">Fruktbare dager</span><span class="cy-mid">ca. ' + cycFmt(fs) + '–' + cycFmt(fe) + '</span><span class="cy-s">eggløsning rundt ' + cycFmt(cycAdd(fs, 5)) + '</span></div>' +
+    '</div>';
+  h += '<div class="card cy-advice"><h3>' + P[0] + '</h3><p>' + P[1] + '</p><ul>' + P[2].map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul></div>';
+
+  // Kalender: forrige uke og fire uker frem
+  var start = cycAdd(today, -((today.getDay() + 6) % 7) - 7);
+  if (!cycSel) cycSel = cycIso(today);
+  h += '<div class="card cy-cal"><div class="cy-calhead"><h3>Oversikt</h3><span class="cy-legend"><i class="lg mens"></i>Mens <i class="lg fert"></i>Fruktbar <i class="lg ov"></i>Eggløsning</span></div><div class="cy-grid">';
+  ['ma', 'ti', 'on', 'to', 'fr', 'lø', 'sø'].forEach(function (w) { h += '<span class="cy-wd">' + w + '</span>'; });
+  for (var i = 0; i < 35; i++) {
+    var d = cycAdd(start, i), k = cycIso(d), kind = cycKind(s, d), rec = s.days[k];
+    var cls = 'cy-d ' + kind + (k === cycIso(today) ? ' today' : '') + (k === cycSel ? ' sel' : '') + (d > today ? ' fut' : '');
+    h += '<button type="button" class="' + cls + '" data-cyd="' + k + '"' + (d > today ? ' disabled' : '') + ' aria-label="' + cycFmt(d) + '">' + d.getDate() + (rec && rec.sym && rec.sym.length ? '<i class="dot"></i>' : '') + '</button>';
+  }
+  h += '</div><p class="cy-s">Trykk på en dag for å skrive inn blødning og symptomer. Lyse felt fremover er anslag.</p></div>';
+
+  // Dagbok for valgt dag
+  var sd = cycDate(cycSel), rec = s.days[cycSel] || { flow: 0, sym: [] }, isStart = s.starts.indexOf(cycSel) >= 0;
+  h += '<div class="card cy-log"><h3>' + (cycSel === cycIso(today) ? 'I dag' : cycFmt(sd)) + '</h3>';
+  h += '<div class="cy-row"><span class="cy-k">Blødning</span><div class="cy-seg">' + CYC_FLOW.map(function (f, i) { return '<button type="button" data-cyflow="' + i + '" aria-pressed="' + ((rec.flow || 0) === i) + '">' + f + '</button>'; }).join('') + '</div></div>';
+  h += '<button type="button" class="ghost cy-startbtn" data-cy="start" aria-pressed="' + isStart + '">' + (isStart ? '✓ Mensen startet denne dagen' : 'Mensen startet denne dagen') + '</button>';
+  h += '<div class="cy-row"><span class="cy-k">Symptomer</span><div class="cy-chips">' + CYC_SYM.map(function (x) { return '<button type="button" data-cysym="' + x[0] + '" aria-pressed="' + ((rec.sym || []).indexOf(x[0]) >= 0) + '">' + x[1] + '</button>'; }).join('') + '</div></div>';
+  var tips = CYC_SYM.filter(function (x) { return (rec.sym || []).indexOf(x[0]) >= 0; });
+  if (tips.length) h += '<div class="cy-tips"><span class="cy-k">Råd for det du kjenner på</span>' + tips.map(function (x) { return '<p><b>' + x[1] + ':</b> ' + x[2] + '</p>'; }).join('') + '</div>';
+  h += '</div>';
+
+  // Mønster
+  var count = {}, n = 0;
+  Object.keys(s.days).forEach(function (k) { if (cycDiff(cycDate(k), today) <= 90) (s.days[k].sym || []).forEach(function (x) { count[x] = (count[x] || 0) + 1; n++; }); });
+  var top = Object.keys(count).sort(function (a, b) { return count[b] - count[a]; }).slice(0, 3).map(function (k) { var x = CYC_SYM.filter(function (y) { return y[0] === k; })[0]; return x ? x[1].toLowerCase() : k; });
+  h += '<div class="card cy-pattern"><h3>Mønsteret ditt</h3><p>' + (inf.gaps.length ? 'Syklusen din har vært i snitt <b>' + inf.L + ' dager</b> de siste ' + (inf.gaps.length + 1) + ' gangene.' : 'Vi bruker <b>' + inf.L + ' dager</b> som syklus til du har registrert to mensstarter. Da regner vi ut din egen.') +
+    (top.length ? ' De siste tre månedene har du oftest kjent på ' + top.join(', ').replace(/, ([^,]*)$/, ' og $1') + '.' : '') + '</p></div>';
+
+  h += '<details class="card cy-doc"><summary>Når bør du snakke med lege?</summary><ul>' +
+    '<li>Blødningen er så kraftig at du må bytte bind eller tampong hver time i flere timer.</li>' +
+    '<li>Smertene er så sterke at de stopper hverdagen din, selv med smertestillende.</li>' +
+    '<li>Mensen har uteblitt i tre måneder, og du er ikke gravid.</li>' +
+    '<li>Syklusen er stadig kortere enn 21 eller lengre enn 35 dager.</li>' +
+    '<li>Du blør mellom mensene eller etter sex.</li></ul></details>';
+  h += '<details class="card cy-set"><summary>Innstillinger</summary><div class="cy-form">' +
+    '<label>Hvor mange dager varer mensen?<input type="number" id="cy-plen" min="2" max="10" value="' + s.plen + '"></label>' +
+    '<label>Vanlig syklus i dager (brukes til du har registrert to mensstarter)<input type="number" id="cy-clen" min="20" max="45" value="' + s.clen + '"></label></div>' +
+    '<div class="cy-actions"><button type="button" data-cy="settings">Lagre</button><button type="button" class="ghost" data-cy="wipe">Slett alle syklusdata</button></div></details>';
+  h += cycPrivacy();
+  box.innerHTML = h;
+}
+function cycPrivacy() {
+  return '<p class="cy-note">Alt du skriver her lagres bare i denne nettleseren, på denne enheten, og deles ikke med noen. Datoene for fruktbare dager og neste mens er anslag ut fra gjennomsnitt. De kan ikke brukes som prevensjon, og erstatter ikke råd fra lege eller helsesykepleier.</p>';
+}
+document.addEventListener('click', function (e) {
+  var box = $('cyc-body'); if (!box || !box.contains(e.target)) return;
+  var s = cycLoad(), b;
+  if ((b = e.target.closest('[data-cyd]'))) { cycSel = b.dataset.cyd; return renderCycle(); }
+  if ((b = e.target.closest('[data-cyflow]'))) {
+    var r = s.days[cycSel] || { flow: 0, sym: [] }; r.flow = +b.dataset.cyflow;
+    // Første blødningsdag etter en pause regnes som ny mensstart.
+    if (r.flow > 0 && s.starts.indexOf(cycSel) < 0) {
+      var prev = s.days[cycIso(cycAdd(cycDate(cycSel), -1))];
+      var near = s.starts.some(function (x) { var g = cycDiff(cycDate(x), cycDate(cycSel)); return g >= 0 && g < 10; });
+      if (!(prev && prev.flow > 0) && !near) s.starts.push(cycSel);
+    }
+    s.days[cycSel] = r; s.starts.sort(); cycSave(s); return renderCycle();
+  }
+  if ((b = e.target.closest('[data-cysym]'))) {
+    var r2 = s.days[cycSel] || { flow: 0, sym: [] }, k = b.dataset.cysym, i = (r2.sym = r2.sym || []).indexOf(k);
+    if (i >= 0) r2.sym.splice(i, 1); else r2.sym.push(k);
+    s.days[cycSel] = r2; cycSave(s); return renderCycle();
+  }
+  if (!(b = e.target.closest('[data-cy]'))) return;
+  var a = b.dataset.cy;
+  if (a === 'setup') {
+    var v = $('cy-start').value; if (!v) { $('cy-start').focus(); return; }
+    s.starts = [v]; s.plen = +$('cy-plen').value || 5; s.clen = +$('cy-clen').value || 28; cycSave(s); cycSel = null; return renderCycle();
+  }
+  if (a === 'start') {
+    var j = s.starts.indexOf(cycSel);
+    if (j >= 0) s.starts.splice(j, 1); else s.starts.push(cycSel);
+    s.starts.sort(); cycSave(s); return renderCycle();
+  }
+  if (a === 'settings') { s.plen = +$('cy-plen').value || s.plen; s.clen = +$('cy-clen').value || s.clen; cycSave(s); renderCycle(); return toast('Lagret'); }
+  if (a === 'wipe') {
+    if (!b.dataset.armed) { b.dataset.armed = '1'; b.textContent = 'Trykk igjen for å slette alt'; return; }
+    try { localStorage.removeItem(CYC_KEY); } catch (e2) {}
+    cycSel = null; renderCycle(); toast('Syklusdata slettet');
+  }
+});
 
 // --- Dagens horoskop: ekte planetposisjoner mot ditt eget kart ---
 var current = null;
